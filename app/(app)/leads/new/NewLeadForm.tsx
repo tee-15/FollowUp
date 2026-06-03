@@ -85,35 +85,38 @@ export default function NewLeadForm() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-lg px-4 py-6">
-        {/* Header */}
-        <div className="mb-6 flex items-center gap-3">
-          <Link
-            href="/leads"
-            className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-            aria-label="Back to leads"
-          >
-            ←
-          </Link>
-          <h1 className="text-xl font-bold text-gray-900">New Lead</h1>
-        </div>
+    <div className="h-full px-4 py-8 lg:px-8 max-w-2xl mx-auto">
+      {/* Header */}
+      <div className="mb-8 flex items-center gap-4">
+        <Link
+          href="/leads"
+          className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/70 backdrop-blur-xl border border-gray-200/50 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          aria-label="Back to leads"
+        >
+          ←
+        </Link>
+        <h1 className="text-3xl font-black text-gray-900 tracking-tight">New Lead</h1>
+      </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+      {/* Card */}
+      <div className="bg-white/70 backdrop-blur-xl rounded-3xl shadow-sm border border-gray-200/60 p-6 md:p-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl" />
+
+        <div className="relative">
           {errors.general && (
             <div
               role="alert"
-              className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700"
+              className="mb-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-medium text-red-700"
             >
               {errors.general}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
             {/* Full Name */}
             <div>
-              <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="full_name" className="block text-sm font-bold text-gray-700 mb-2">
                 Full name <span aria-hidden="true" className="text-red-500">*</span>
               </label>
               <input
@@ -129,7 +132,7 @@ export default function NewLeadForm() {
                 className={inputClass(!!errors.full_name)}
               />
               {errors.full_name && (
-                <p id="full_name-error" role="alert" className="mt-1 text-xs text-red-600">
+                <p id="full_name-error" role="alert" className="mt-2 text-xs font-medium text-red-600">
                   {errors.full_name}
                 </p>
               )}
@@ -137,7 +140,7 @@ export default function NewLeadForm() {
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mb-2">
                 Phone number <span aria-hidden="true" className="text-red-500">*</span>
               </label>
               <input
@@ -153,7 +156,7 @@ export default function NewLeadForm() {
                 className={inputClass(!!errors.phone)}
               />
               {errors.phone && (
-                <p id="phone-error" role="alert" className="mt-1 text-xs text-red-600">
+                <p id="phone-error" role="alert" className="mt-2 text-xs font-medium text-red-600">
                   {errors.phone}
                 </p>
               )}
@@ -161,8 +164,8 @@ export default function NewLeadForm() {
 
             {/* Email (optional) */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email address <span className="text-gray-400 font-normal">(optional)</span>
+              <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
+                Email address <span className="text-gray-400 font-medium">(optional)</span>
               </label>
               <input
                 id="email"
@@ -178,7 +181,7 @@ export default function NewLeadForm() {
 
             {/* Source */}
             <div>
-              <label htmlFor="source" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="source" className="block text-sm font-bold text-gray-700 mb-2">
                 Source <span aria-hidden="true" className="text-red-500">*</span>
               </label>
               <select
@@ -188,8 +191,8 @@ export default function NewLeadForm() {
                 aria-invalid={!!errors.source}
                 aria-describedby={errors.source ? 'source-error' : undefined}
                 disabled={loading}
-                className={`w-full rounded-lg border px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white ${
-                  errors.source ? 'border-red-400 bg-red-50' : 'border-gray-300'
+                className={`w-full rounded-xl border px-4 py-3 text-sm text-gray-900 outline-none transition focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white shadow-sm ${
+                  errors.source ? 'border-red-400 bg-red-50' : 'border-gray-200/80'
                 }`}
               >
                 <option value="">Select a source…</option>
@@ -198,7 +201,7 @@ export default function NewLeadForm() {
                 ))}
               </select>
               {errors.source && (
-                <p id="source-error" role="alert" className="mt-1 text-xs text-red-600">
+                <p id="source-error" role="alert" className="mt-2 text-xs font-medium text-red-600">
                   {errors.source}
                 </p>
               )}
@@ -207,13 +210,13 @@ export default function NewLeadForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full min-h-[48px] rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full min-h-[48px] rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-[1.02] hover:shadow-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 mt-4"
             >
               {loading ? 'Creating lead…' : 'Create lead'}
             </button>
           </form>
         </div>
       </div>
-    </main>
+    </div>
   )
 }

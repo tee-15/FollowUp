@@ -1,11 +1,8 @@
 // lib/types.ts
-// Core TypeScript types for the FollowUp CRM application
+// Core TypeScript types for FollowUp AI
 
-export type Status = 'New' | 'Contacted' | 'Interested' | 'Negotiation' | 'Won' | 'Lost'
-
-export type Source = 'WhatsApp' | 'Instagram' | 'Facebook' | 'Referral' | 'Other'
-
-export type ActivityType = 'created' | 'updated' | 'note' | 'followup' | 'message'
+export type ReminderSource = 'WhatsApp' | 'Instagram' | 'Voice' | 'Manual' | 'Screenshot'
+export type ReminderStatus = 'pending' | 'completed' | 'snoozed'
 
 export interface Profile {
   id: string
@@ -15,42 +12,28 @@ export interface Profile {
   created_at: string
 }
 
-export interface Lead {
+export interface Reminder {
   id: string
   user_id: string
-  full_name: string
-  phone: string
-  email: string | null
-  source: Source
-  status: Status
+  customer_name: string
+  phone: string | null
+  topic: string
+  summary: string | null
+  source: ReminderSource
+  status: ReminderStatus
+  due_date: string // 'YYYY-MM-DD'
+  notes: string | null
   created_at: string
   updated_at: string
 }
 
-export interface FollowUp {
-  id: string
-  lead_id: string
-  user_id: string
-  due_date: string       // 'YYYY-MM-DD'
-  completed: boolean
-  created_at: string
-}
-
-export interface Note {
-  id: string
-  lead_id: string
-  user_id: string
-  content: string
-  created_at: string
-}
-
-export interface Activity {
-  id: string
-  lead_id: string
-  user_id: string
-  type: ActivityType
-  description: string
-  created_at: string
+export interface AIExtractResult {
+  customer_name: string
+  phone: string | null
+  topic: string
+  summary: string
+  suggested_due_date: string // 'YYYY-MM-DD'
+  source: ReminderSource
 }
 
 export type ActionResult<T> =

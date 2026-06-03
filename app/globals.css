@@ -7,21 +7,24 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), Georgia, serif;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .font-serif-display {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
+  .font-sans-body {
+    font-family: var(--font-inter), system-ui, sans-serif;
   }
 }

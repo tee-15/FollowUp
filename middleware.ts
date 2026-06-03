@@ -9,7 +9,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // Routes that never require authentication
-const PUBLIC_ROUTES = ['/login', '/register']
+const PUBLIC_ROUTES = ['/', '/login', '/register']
 
 // URL prefixes that belong to Next.js internals / static assets and must always pass through
 const ALWAYS_ALLOW_PREFIXES = [

@@ -1,10 +1,5 @@
 'use client'
 
-// app/register/RegisterForm.tsx
-// Client-side registration form component.
-// Validates: email format, password 8–128 chars, name and businessName non-empty.
-// Calls registerUser server action and renders inline field errors from ActionResult.fields.
-
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -28,28 +23,16 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
 
-  // ---------------------------------------------------------------------------
-  // Client-side validation
-  // ---------------------------------------------------------------------------
-
   function validate(): FormErrors {
     const errs: FormErrors = {}
-
-    if (!name.trim()) {
-      errs.name = 'Name is required'
-    }
-
-    if (!businessName.trim()) {
-      errs.businessName = 'Business name is required'
-    }
-
+    if (!name.trim()) errs.name = 'Name is required'
+    if (!businessName.trim()) errs.businessName = 'Business name is required'
     const trimmedEmail = email.trim()
     if (!trimmedEmail) {
       errs.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       errs.email = 'Enter a valid email address'
     }
-
     if (!password) {
       errs.password = 'Password is required'
     } else if (password.length < 8) {
@@ -57,26 +40,18 @@ export default function RegisterForm() {
     } else if (password.length > 128) {
       errs.password = 'Password must be at most 128 characters'
     }
-
     return errs
   }
 
-  // ---------------------------------------------------------------------------
-  // Submit handler
-  // ---------------------------------------------------------------------------
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-
     const clientErrors = validate()
     if (Object.keys(clientErrors).length > 0) {
       setErrors(clientErrors)
       return
     }
-
     setErrors({})
     setLoading(true)
-
     try {
       const result = await registerUser({
         email: email.trim(),
@@ -84,13 +59,10 @@ export default function RegisterForm() {
         name: name.trim(),
         businessName: businessName.trim(),
       })
-
       if (result.success) {
         router.push('/dashboard')
         return
       }
-
-      // Map server-returned field errors back to form state (ActionResult.fields)
       const serverErrors: FormErrors = { general: result.error }
       if (result.fields) {
         if (result.fields.name) serverErrors.name = result.fields.name
@@ -106,98 +78,126 @@ export default function RegisterForm() {
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Helper for input class names
-  // ---------------------------------------------------------------------------
+  const inputBase = 'w-full rounded-xl border px-4 py-3.5 text-sm text-gray-900 placeholder-gray-400 outline-none transition-all focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 hover:bg-white focus:bg-white font-sans-body'
+  const inputError = 'border-red-300 bg-red-50 focus:ring-red-400'
+  const inputNormal = 'border-gray-200'
 
-  function inputClass(hasError: boolean) {
-    return [
-      'w-full rounded-lg border px-4 py-3 text-sm text-gray-900 placeholder-gray-400',
-      'outline-none transition focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-      hasError ? 'border-red-400 bg-red-50 focus:ring-red-400' : 'border-gray-300 bg-white',
-    ].join(' ')
-  }
-
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
+  const PERKS = [
+    { icon: '📊', text: 'Visual Kanban pipeline' },
+    { icon: '💬', text: 'One-click WhatsApp messaging' },
+    { icon: '📅', text: 'Smart follow-up scheduling' },
+    { icon: '⚡️', text: 'Instant load, zero lag' },
+  ]
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="w-full max-w-sm">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Create your account</h1>
-          <p className="mt-2 text-sm text-gray-600">Start managing your leads with FollowUp</p>
+    <div className="min-h-screen flex bg-white">
+      {/* Left Panel — Decorative */}
+      <div className="hidden lg:flex w-1/2 relative overflow-hidden bg-[#0A0A0A] flex-col justify-between p-12">
+        <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px]" />
+
+        {/* Logo */}
+        <div className="flex items-center gap-3 relative z-10">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-lg shadow-lg">F</div>
+          <span className="text-xl font-bold text-white tracking-tight font-sans-body">FollowUp</span>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-          {/* General error banner */}
+        {/* Center content */}
+        <div className="relative z-10">
+          <h2 className="text-3xl font-bold text-white leading-snug mb-8" style={{fontFamily: 'var(--font-playfair)'}}>
+            Everything you need to close more deals.
+          </h2>
+          <ul className="space-y-4">
+            {PERKS.map((perk) => (
+              <li key={perk.text} className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg shrink-0 border border-white/10">
+                  {perk.icon}
+                </div>
+                <span className="text-gray-300 font-sans-body text-sm font-medium">{perk.text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Bottom CTA note */}
+        <p className="text-gray-600 text-xs font-sans-body relative z-10">
+          🔒 Secured by Supabase Auth. Your data is end-to-end encrypted.
+        </p>
+      </div>
+
+      {/* Right Panel — Form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-gray-50/50 overflow-y-auto">
+        <div className="w-full max-w-md">
+
+          {/* Mobile Logo */}
+          <div className="lg:hidden flex items-center gap-3 mb-10">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-lg shadow-lg">F</div>
+            <span className="text-xl font-bold text-gray-900 tracking-tight font-sans-body">FollowUp</span>
+          </div>
+
+          <div className="mb-10">
+            <h1 className="text-4xl font-bold text-gray-900 mb-3 leading-tight" style={{fontFamily: 'var(--font-playfair)'}}>
+              Create your account
+            </h1>
+            <p className="text-gray-500 font-sans-body text-base">
+              Start closing more deals today. Free forever.
+            </p>
+          </div>
+
           {errors.general && (
-            <div
-              role="alert"
-              className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700"
-            >
+            <div role="alert" className="mb-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3.5 text-sm text-red-700 font-sans-body">
               {errors.general}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} noValidate>
-            {/* Name */}
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Your name
-              </label>
-              <input
-                id="name"
-                type="text"
-                autoComplete="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                aria-describedby={errors.name ? 'name-error' : undefined}
-                aria-invalid={!!errors.name}
-                className={inputClass(!!errors.name)}
-                placeholder="Jane Smith"
-                disabled={loading}
-              />
-              {errors.name && (
-                <p id="name-error" role="alert" className="mt-1 text-xs text-red-600">
-                  {errors.name}
-                </p>
-              )}
-            </div>
-
-            {/* Business Name */}
-            <div className="mb-4">
-              <label
-                htmlFor="businessName"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Business name
-              </label>
-              <input
-                id="businessName"
-                type="text"
-                autoComplete="organization"
-                value={businessName}
-                onChange={(e) => setBusinessName(e.target.value)}
-                aria-describedby={errors.businessName ? 'businessName-error' : undefined}
-                aria-invalid={!!errors.businessName}
-                className={inputClass(!!errors.businessName)}
-                placeholder="Acme Ltd"
-                disabled={loading}
-              />
-              {errors.businessName && (
-                <p id="businessName-error" role="alert" className="mt-1 text-xs text-red-600">
-                  {errors.businessName}
-                </p>
-              )}
+          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+            {/* Name + Business Name side by side */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2 font-sans-body">
+                  Your name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                  aria-invalid={!!errors.name}
+                  className={`${inputBase} ${errors.name ? inputError : inputNormal}`}
+                  placeholder="Jane Smith"
+                  disabled={loading}
+                />
+                {errors.name && (
+                  <p id="name-error" role="alert" className="mt-2 text-xs text-red-600 font-sans-body font-medium">{errors.name}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="businessName" className="block text-sm font-semibold text-gray-700 mb-2 font-sans-body">
+                  Business name
+                </label>
+                <input
+                  id="businessName"
+                  type="text"
+                  autoComplete="organization"
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  aria-describedby={errors.businessName ? 'businessName-error' : undefined}
+                  aria-invalid={!!errors.businessName}
+                  className={`${inputBase} ${errors.businessName ? inputError : inputNormal}`}
+                  placeholder="Acme Ltd"
+                  disabled={loading}
+                />
+                {errors.businessName && (
+                  <p id="businessName-error" role="alert" className="mt-2 text-xs text-red-600 font-sans-body font-medium">{errors.businessName}</p>
+                )}
+              </div>
             </div>
 
             {/* Email */}
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <div>
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2 font-sans-body">
                 Email address
               </label>
               <input
@@ -208,20 +208,18 @@ export default function RegisterForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 aria-describedby={errors.email ? 'email-error' : undefined}
                 aria-invalid={!!errors.email}
-                className={inputClass(!!errors.email)}
+                className={`${inputBase} ${errors.email ? inputError : inputNormal}`}
                 placeholder="you@example.com"
                 disabled={loading}
               />
               {errors.email && (
-                <p id="email-error" role="alert" className="mt-1 text-xs text-red-600">
-                  {errors.email}
-                </p>
+                <p id="email-error" role="alert" className="mt-2 text-xs text-red-600 font-sans-body font-medium">{errors.email}</p>
               )}
             </div>
 
             {/* Password */}
-            <div className="mb-6">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <div>
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2 font-sans-body">
                 Password
               </label>
               <input
@@ -232,43 +230,38 @@ export default function RegisterForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 aria-describedby={errors.password ? 'password-error' : 'password-hint'}
                 aria-invalid={!!errors.password}
-                className={inputClass(!!errors.password)}
+                className={`${inputBase} ${errors.password ? inputError : inputNormal}`}
                 placeholder="Min. 8 characters"
                 disabled={loading}
               />
               {errors.password ? (
-                <p id="password-error" role="alert" className="mt-1 text-xs text-red-600">
-                  {errors.password}
-                </p>
+                <p id="password-error" role="alert" className="mt-2 text-xs text-red-600 font-sans-body font-medium">{errors.password}</p>
               ) : (
-                <p id="password-hint" className="mt-1 text-xs text-gray-500">
-                  Between 8 and 128 characters
-                </p>
+                <p id="password-hint" className="mt-2 text-xs text-gray-400 font-sans-body">Between 8 and 128 characters</p>
               )}
             </div>
 
-            {/* Submit — min h-12 (48px) touch target, disabled while loading */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full min-h-12 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full min-h-[52px] rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-base shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.01] transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 font-sans-body mt-2"
             >
-              {loading ? 'Creating account…' : 'Create account'}
+              {loading ? 'Creating account…' : 'Create free account'}
             </button>
-          </form>
-        </div>
 
-        {/* Footer link */}
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link
-            href="/login"
-            className="font-semibold text-blue-600 hover:text-blue-700 underline-offset-2 hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
+            <p className="text-center text-xs text-gray-400 font-sans-body">
+              By signing up you agree to our Terms of Service and Privacy Policy.
+            </p>
+          </form>
+
+          <p className="mt-8 text-center text-sm text-gray-500 font-sans-body">
+            Already have an account?{' '}
+            <Link href="/login" className="font-bold text-blue-600 hover:text-blue-700 underline-offset-2 hover:underline">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
-    </main>
+    </div>
   )
 }
