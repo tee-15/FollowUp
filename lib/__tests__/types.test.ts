@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import type { Status, Source, ActivityType, Profile, Lead, FollowUp, Note, Activity, ActionResult } from '@/lib/types'
+import type { Status, Source, ActivityType, Lead, FollowUp, Note, Activity, ActionResult } from '@/lib/types'
 
 // Smoke tests verifying TypeScript types compile and values satisfy type constraints
 
