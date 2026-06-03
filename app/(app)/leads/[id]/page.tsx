@@ -64,15 +64,15 @@ export default async function LeadDetailPage({ params }: Props) {
   return (
     <>
       {/* Back navigation bar */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 z-10 bg-white/70 backdrop-blur-xl border-b border-gray-200/50 px-4 py-3 flex items-center gap-3 shadow-sm">
         <Link
           href="/leads"
-          className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 shadow-sm"
           aria-label="Back to leads"
         >
           ←
         </Link>
-        <h1 className="text-base font-semibold text-gray-900 truncate">{lead.full_name}</h1>
+        <h1 className="text-sm font-bold text-gray-700 truncate tracking-wide uppercase">Lead Profile</h1>
       </div>
 
       <LeadDetailClient

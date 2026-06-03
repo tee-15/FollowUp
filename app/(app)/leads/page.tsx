@@ -81,22 +81,20 @@ export default async function LeadsPage() {
   )
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-2xl px-4 py-6">
-        {/* Page header */}
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Leads</h1>
-          <Link
-            href="/leads/new"
-            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-          >
-            + Add Lead
-          </Link>
-        </div>
-
-        {/* Client component handles status filter + card rendering (Req 3.5) */}
-        <LeadsListClient leads={leadsWithNextFollowUp} />
+    <div className="h-full px-4 py-8 lg:px-8 max-w-5xl mx-auto">
+      {/* Page header */}
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-black text-gray-900 tracking-tight">Leads</h1>
+        <Link
+          href="/leads/new"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-[1.02] hover:shadow-blue-500/50 focus:outline-none"
+        >
+          + Add Lead
+        </Link>
       </div>
-    </main>
+
+      {/* Client component handles status filter + card rendering (Req 3.5) */}
+      <LeadsListClient leads={leadsWithNextFollowUp} />
+    </div>
   )
 }
